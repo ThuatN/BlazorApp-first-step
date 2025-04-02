@@ -1,0 +1,21 @@
+﻿@using Model
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Card.Title</h5>
+        <p class="card-text">@Card.Description</p>
+        <button class="btn btn-primary" @onclick="EditCard">Edit</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public CardDto Card { get; set; }
+
+    private void EditCard()
+    {
+        Navigation.NavigateTo($"/card/{Card.CardId}");
+    }
+}

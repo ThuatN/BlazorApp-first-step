@@ -1,0 +1,57 @@
+﻿@page "/card/{id:int}"
+@using BlazorApp.Model
+@inject Service.CardService CardService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3>Edit Card</h3>
+
+@if (Card == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="Card" OnValidSubmit="HandleValidSubmit" FormName="MyEditForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <InputText id="title" class="form-control" @bind-Value="@Card.Title" />
+            <ValidationMessage For="@(() => Card.Title)" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="@Card.Description" />
+            <ValidationMessage For="@(() => Card.Description)" />
+        </div>
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CardDto Card { get; set; } = new CardDto();
+
+    protected override void OnInitialized()
+    {
+        Card = CardService.GetCard(Id) ?? new CardDto();
+    }
+
+    private void HandleValidSubmit()
+    {
+        CardService.UpdateCard(Card);
+        Navigation.NavigateTo("/card");
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/card");
+    }
+}

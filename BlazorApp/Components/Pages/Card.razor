@@ -1,0 +1,20 @@
+﻿@using BlazorApp.Model
+@using BlazorApp.Components.Pages.card
+@page "/card"
+@inject Service.CardService CardService
+
+<div class="d-flex gap-3">
+    @foreach (var card in cards)
+    {
+        <CardComponent Card="card"></CardComponent>
+    }
+</div>
+
+@code {
+    private List<CardDto> cards = new List<CardDto>();
+
+    protected override void OnInitialized()
+    {
+        cards = CardService.GetCards().ToList();
+    }
+}
